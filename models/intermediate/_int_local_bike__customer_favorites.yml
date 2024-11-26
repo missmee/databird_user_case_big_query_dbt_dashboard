@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: int_local_bike__customer_favorites
+    description: '{{ doc("int_local_bike__customer_favorites") }}'
+    columns:
+      - name: customer_id
+        description: "Primary key, unique identifier for customer."
+        tests:
+          - unique
+          - not_null
+      

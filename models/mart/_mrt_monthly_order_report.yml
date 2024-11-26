@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: mrt_monthly_order_report
+    description: '{{ doc("mrt_monthly_order_report") }}'

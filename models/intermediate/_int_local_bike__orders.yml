@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: int_local_bike__orders
+    description: '{{ doc("int_local_bike__orders") }}'
+    columns:
+      - name: order_id
+        description: "Primary key, unique identifier for each order."
+        tests:
+          - unique
+          - not_null
+      - name: order_status
+        description: "Status of each order, int transformed into string to describe the status more precisely."
+        tests:
+          - accepted_values:
+              name: accepted_values_order_status
+              values: ['Processed', 'Shipped', 'Delivered', 'Returned / Lost']
+      - name: customer_status
+        description: "Either 'past client' if the first order is older than a month  or 'new client' if the 1st order is less than a month old."
+        tests:
+          - accepted_values:
+              name: accepted_values_order_status
+              values: ['Past client', 'New client']
+      - name: customer_id
+        description: "Foreign key linking to the customer who passed the order."
+        tests:
+          - relationships:
+              name: customer_id_foreign_key_in_int_local_bike__orders
+              to: ref('stg_local_bike__customers')
+              field: customer_id
+

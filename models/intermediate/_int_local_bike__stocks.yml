@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: int_local_bike__stocks
+    description: "This model contains information about products low in stock (one piece or none) with their name and category of product."
+    columns:
+      - name: product_id
+        description: "Foreign key, identifying each product in the products table."
+      - name: category_id
+        description: "Foreign key, identifying each category of product in the categories table."
+      - name: product_name
+        description: "Name of each product from the products table."
+      - name: item_quantity_in_stock
+        description: "Quantity of each product in stores filtered to one or less piece."
+      - name: store_name
+        description: "Store's name."
+      - name: store_id
+        description: "Foreign key, identifying each store in the stores table."
+

@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: mrt_popularity_report
+    description: '{{ doc("mrt_popularity_report") }}'
