@@ -18,4 +18,4 @@ SELECT
     product_name,
     brand_name
 FROM ranked_products
-WHERE row_num = 3 -- Top 3 pour chaque magasin
+WHERE row_num <= 3 -- Top 3 pour chaque magasin
