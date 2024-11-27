@@ -1,4 +1,4 @@
-SELECT CONCAT(order_id, '_', product_id) AS order_item_id,
+SELECT CONCAT(order_id, '_', item_id) AS order_item_id,
   order_id,
   product_id,
   list_price AS item_price,

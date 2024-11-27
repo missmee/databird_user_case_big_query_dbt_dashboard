@@ -14,7 +14,7 @@ models:
         tests:
           - accepted_values:
               name: accepted_values_order_status
-              values: ['Processed', 'Shipped', 'Delivered', 'Returned / Lost']
+              values: ['Processed', 'Shipped', 'Returned / Lost', 'Delivered']
       - name: customer_status
         description: "Either 'past client' if the first order is older than a month  or 'new client' if the 1st order is less than a month old."
         tests:
