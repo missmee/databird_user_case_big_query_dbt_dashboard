@@ -27,7 +27,7 @@ customer_status_definition AS (
     EXTRACT(MONTH FROM MIN(order_date)) AS month,
     CASE 
       WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018 
-        AND EXTRACT(MONTH FROM MIN(order_date)) = 12 THEN 'New client'
+        AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client'
       ELSE 'Past client'
     END AS customer_status
   FROM {{ ref("stg_local_bike__orders") }}
@@ -46,3 +46,4 @@ SELECT
   c.customer_status
 FROM items_grouped_by_order AS oi 
 LEFT JOIN customer_status_definition AS c ON oi.customer_id = c.customer_id
+WHERE oi.order_date <= '2018-04-30' -- pour l'exercice, je limite à cette date car après les données sont parcellaires

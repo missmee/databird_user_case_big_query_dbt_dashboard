@@ -30,6 +30,12 @@ visuelle.
 ### Notes
 
 Le dataset va du 2016-01-01 à 2018-12-28.
+Mais les données sont parcellaires après le 2018-04-30. Il n'y a aucune données pour mai 
+et une ou deux orders en status 3 pour les mois suivants. 
+Soit l'entreprise court à sa perte, soit on pourrait imaginer un bug dans l'acquisition de données.
+La deuxième hypothèse est plus plausible sinon solliciter la mise en place de dashboard pour l'usage
+des données ne serait pas leur priorité.
+Quoiqu'il en soit pour l'exercice j'ai donc limité aux données avant cette date.
 
 La signification des chiffres pour order_status n'n'est pas défini. 
 J'ai remarqué que date_shipped n'est renseignée qu'avec le satut 4, j'ai donc inventé les autres.
