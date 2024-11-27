@@ -30,8 +30,13 @@ visuelle.
 ### Notes
 
 Le dataset va du 2016-01-01 à 2018-12-28.
+
 La signification des chiffres pour order_status n'n'est pas défini. 
 J'ai remarqué que date_shipped n'est renseignée qu'avec le satut 4, j'ai donc inventé les autres.
+
+Après vérification, le dataset ne contient que les prix de vente, pas les prix de gros 
+(le prix de la table products est le même que dans la table orders). 
+Il n'est donc pas possible de calculer la marge.
 
 Pour l'analyse, j'ai volontairement ecarté l'utilisation de la table staff. A la description de l'entreprise,
 il ressort que le fait d'évaluer son personnel selon les ventes ne serait pas aligné avec sa philosophie.
