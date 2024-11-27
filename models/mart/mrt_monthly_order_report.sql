@@ -1,5 +1,5 @@
 SELECT 
-  DATE_TRUNC(o.order_date, MONTH) AS report_date,
+  FORMAT_DATE('%Y-%m', DATE_TRUNC(o.order_date, MONTH)) AS report_date -- je reformate pour la datavis
   COUNT(DISTINCT o.order_id) AS total_nb_of_orders,
   ROUND(SUM(o.total_order_amount),2) AS total_monthly_order_amount,
   ROUND(AVG(o.total_order_amount),2) AS average_total_order_amount,

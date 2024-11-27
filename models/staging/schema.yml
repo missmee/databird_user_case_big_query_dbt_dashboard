@@ -111,7 +111,7 @@ models:
         tests:
           - relationships:
               name: brand_id_foreign_key_in_stg_local_bike__products
-              to: ref('stg_local_bike__brand')
+              to: ref('stg_local_bike__brands')
               field: brand_id
       - name: category_id
         description: "Foreign key linking the category of the product."
