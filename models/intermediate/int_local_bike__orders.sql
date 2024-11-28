@@ -55,3 +55,6 @@ SELECT
   c.customer_status
 FROM items_grouped_by_order AS oi 
 LEFT JOIN customer_status_definition AS c ON oi.customer_id = c.customer_id
+-- I'm limiting myself to this date because the data is patchy after that
+-- would not be done in a normal env.
+WHERE oi.order_date <= '2018-04-30' 
