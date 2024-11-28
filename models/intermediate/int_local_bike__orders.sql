@@ -22,19 +22,19 @@ items_grouped_by_order AS (
 
 -- Identifying new customers, customers who ordered once and recurrent customers
 -- How customers ordered: month of first order and total number of orders
-WITH customer_orders AS (
+customer_orders AS (
     SELECT 
-        customer_id,
-        order_date,
-        EXTRACT(YEAR FROM order_date) AS order_year,
-        EXTRACT(MONTH FROM order_date) AS order_month,
-        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_rank, -- Classement des commandes d’un client
-        COUNT(*) OVER (PARTITION BY customer_id) AS total_orders -- Nombre total de commandes d’un client
+      customer_id,
+      order_date,
+      EXTRACT(YEAR FROM order_date) AS order_year,
+      EXTRACT(MONTH FROM order_date) AS order_month,
+      ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_rank, -- Classement des commandes d’un client
+      COUNT(*) OVER (PARTITION BY customer_id) AS total_orders -- Nombre total de commandes d’un client
     FROM {{ ref("stg_local_bike__orders") }}
 ),
 
 customer_status_definition AS (
-SELECT 
+    SELECT 
         customer_id,
         order_date,
         order_year,
