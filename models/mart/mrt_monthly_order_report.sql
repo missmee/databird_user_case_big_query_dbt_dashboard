@@ -4,7 +4,7 @@
 -- overall number of products low in stocks
 -- grouped by store, city
 SELECT 
-  FORMAT_DATE('%Y-%m', DATE_TRUNC(o.order_date, MONTH)) AS report_date, -- reformatting for the datavis to yyyy-mm
+  DATE_TRUNC(o.order_date, MONTH) AS report_date,
   COUNT(DISTINCT o.order_id) AS total_nb_of_orders,
   ROUND(SUM(o.total_order_amount),2) AS total_monthly_order_amount,
   ROUND(AVG(o.total_items),2) AS average_items,
