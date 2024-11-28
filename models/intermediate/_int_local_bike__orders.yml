@@ -20,7 +20,7 @@ models:
         tests:
           - accepted_values:
               name: accepted_values_order_status
-              values: ['Past client', 'New client']
+              values: ['New customer', 'Unique order customer', 'Recurrent customer']
       - name: customer_id
         description: "Foreign key linking to the customer who passed the order."
         tests:
