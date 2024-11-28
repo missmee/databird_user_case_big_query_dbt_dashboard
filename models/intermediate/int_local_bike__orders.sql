@@ -10,7 +10,7 @@ items_grouped_by_order AS (
       o.store_id,
       SUM(total_order_item_amount) AS total_order_amount,
       SUM(item_quantity) AS total_items,
-      COUNT(DISTINCT oi. product_id) AS total_distinct_items
+      COUNT(DISTINCT oi.product_id) AS total_distinct_items
     FROM {{ ref('stg_local_bike__order_items') }} AS oi
     INNER JOIN {{ ref('stg_local_bike__orders') }} o ON oi.order_id = o.order_id    
     GROUP BY oi.order_id, 
@@ -20,23 +20,29 @@ items_grouped_by_order AS (
         o.customer_id
 ),
 
--- clustering customers between new clients who ordered for the 1st in the current month
--- and returning clients who already ordered more than a month ago.
--- Saved in customer_status past/new
+-- Clustering customers between new clients (who ordered for the first time in a given month)
+-- and returning clients who ordered more than a month ago.
+-- This CTE classifies customers as either 'New client' or 'Past client'
 customer_status_definition AS (
   SELECT 
     customer_id,
-    EXTRACT(YEAR FROM MIN(order_date)) AS year,
-    EXTRACT(MONTH FROM MIN(order_date)) AS month,
+    EXTRACT(YEAR FROM MIN(order_date)) AS year,          -- Year of the first order
+    EXTRACT(MONTH FROM MIN(order_date)) AS month,        -- Month of the first order
+    MIN(order_date) AS first_order_date,                 -- Date of the first order
     CASE 
-      WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018                    -- static info, not extracting current month for the exercice as it is 
-        AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client'  -- old data. Excluding the bugging data from May 2018 onwards
-      ELSE 'Past client'
+      WHEN MIN(order_date) <= '2018-04-30' THEN          -- making sure it's before or on April 30, 2018
+        CASE 
+          WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018 AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client' 
+          ELSE 'Past client'
+        END
+      ELSE 'New client'   -- All customers who have placed their first order after April 2018 are considered 'New client', just in case
     END AS customer_status
   FROM {{ ref("stg_local_bike__orders") }}
+  WHERE order_date <= '2018-04-30'  -- Limit the orders to the valid date range
   GROUP BY customer_id
 )
 
+-- Final query to select all the relevant order information along with customer status
 SELECT
   oi.order_id,
   oi.order_status,
@@ -49,4 +55,3 @@ SELECT
   c.customer_status
 FROM items_grouped_by_order AS oi 
 LEFT JOIN customer_status_definition AS c ON oi.customer_id = c.customer_id
-WHERE oi.order_date <= '2018-04-30' -- I'm limiting myself to this date because the data is patchy after that
