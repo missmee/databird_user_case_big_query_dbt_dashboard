@@ -1,3 +1,6 @@
+-- gathering together in order_item the missing information about item product name and brand
+-- joing the two differents tables where the information is (products and brands)
+-- now we have all the information about items in the same view
 SELECT order_item_id,
   order_id,
   oi.item_quantity,
