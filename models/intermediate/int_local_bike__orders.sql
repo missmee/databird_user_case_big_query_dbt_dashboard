@@ -12,7 +12,7 @@ items_grouped_by_order AS (
       SUM(item_quantity) AS total_items,
       COUNT(DISTINCT oi.product_id) AS total_distinct_items
     FROM {{ ref('stg_local_bike__order_items') }} AS oi
-    INNER JOIN {{ ref('stg_local_bike__orders') }} o ON oi.order_id = o.order_id    
+    INNER JOIN {{ ref('stg_local_bike__orders') }} o ON oi.order_id = o.order_id  
     GROUP BY oi.order_id, 
         o.order_status, 
         o.order_date,
@@ -30,15 +30,10 @@ customer_status_definition AS (
     EXTRACT(MONTH FROM MIN(order_date)) AS month,        -- Month of the first order
     MIN(order_date) AS first_order_date,                 -- Date of the first order
     CASE 
-      WHEN MIN(order_date) <= '2018-04-30' THEN          -- making sure it's before or on April 30, 2018
-        CASE 
-          WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018 AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client' 
+      WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018 AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client' 
           ELSE 'Past client'
-        END
-      ELSE 'New client'   -- All customers who have placed their first order after April 2018 are considered 'New client', just in case
-    END AS customer_status
+        END AS customer_status
   FROM {{ ref("stg_local_bike__orders") }}
-  WHERE order_date <= '2018-04-30'  -- Limit the orders to the valid date range
   GROUP BY customer_id
 )
 
@@ -55,6 +50,3 @@ SELECT
   c.customer_status
 FROM items_grouped_by_order AS oi 
 LEFT JOIN customer_status_definition AS c ON oi.customer_id = c.customer_id
--- I'm limiting myself to this date because the data is patchy after that
--- would not be done in a normal env.
-WHERE oi.order_date <= '2018-04-30' 
