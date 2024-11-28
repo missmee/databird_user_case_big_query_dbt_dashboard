@@ -1,3 +1,5 @@
+-- selecting products that are 1 or 0 left in stock
+
 WITH product_low_in_stock AS (
   SELECT product_id,
   item_quantity_in_stock AS item_quantity_low_in_stock
@@ -6,6 +8,8 @@ WITH product_low_in_stock AS (
 )
 
 SELECT
+-- at the same getting the category and product name to assess the needs more precisely
+-- and the store_id so as to see store by store products low in stock
   stk.product_id,
   p.category_id,
   p.product_name, 

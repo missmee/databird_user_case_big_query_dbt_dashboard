@@ -1,5 +1,6 @@
+-- gathering all the info we need about orders by joining order_items and orders,
+-- including calculated info about the total amount for each order, the number of items and of distinct items.
 WITH 
--- everything about orders
 items_grouped_by_order AS (
     SELECT 
       oi.order_id,
@@ -19,15 +20,17 @@ items_grouped_by_order AS (
         o.customer_id
 ),
 
--- customer status past/new
+-- clustering customers between new clients who ordered for the 1st in the current month
+-- and returning clients who already ordered more than a month ago.
+-- Saved in customer_status past/new
 customer_status_definition AS (
   SELECT 
     customer_id,
     EXTRACT(YEAR FROM MIN(order_date)) AS year,
     EXTRACT(MONTH FROM MIN(order_date)) AS month,
     CASE 
-      WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018 
-        AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client'
+      WHEN EXTRACT(YEAR FROM MIN(order_date)) = 2018                    -- static info, not extracting current month for the exercice as it is 
+        AND EXTRACT(MONTH FROM MIN(order_date)) = 04 THEN 'New client'  -- old data. Excluding the bugging data from May 2018 onwards
       ELSE 'Past client'
     END AS customer_status
   FROM {{ ref("stg_local_bike__orders") }}
@@ -46,4 +49,4 @@ SELECT
   c.customer_status
 FROM items_grouped_by_order AS oi 
 LEFT JOIN customer_status_definition AS c ON oi.customer_id = c.customer_id
-WHERE oi.order_date <= '2018-04-30' -- pour l'exercice, je limite à cette date car après les données sont parcellaires
+WHERE oi.order_date <= '2018-04-30' -- I'm limiting myself to this date because the data is patchy after that
