@@ -16,6 +16,9 @@ SELECT
   stk.store_city AS store_city
 FROM {{ ref("int_local_bike__orders") }} AS o
 LEFT JOIN {{ ref("int_local_bike__stocks") }} AS stk ON stk.store_id = o.store_id
+-- I'm limiting myself to this date because the data is patchy after that
+-- would not be done in a normal env.
+WHERE o.order_date <= '2018-04-30' 
 GROUP BY 
   report_date,
   stk.store_name,
