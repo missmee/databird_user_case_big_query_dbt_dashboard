@@ -1,5 +1,3 @@
--- gathering all the info we need about orders by joining order_items and orders,
--- including calculated info about the total amount for each order, the number of items and of distinct items.
 WITH 
 items_grouped_by_order AS (
     SELECT 
@@ -20,51 +18,35 @@ items_grouped_by_order AS (
         o.customer_id
 ),
 
--- Identifying new customers, customers who ordered once and recurrent customers
--- How customers ordered: month of first order and total number of orders
-customer_orders AS (
+customer_status AS (
     SELECT 
-      customer_id,
-      order_date,
-      EXTRACT(YEAR FROM order_date) AS order_year,
-      EXTRACT(MONTH FROM order_date) AS order_month,
-      ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_rank, -- Classement des commandes d’un client
-      COUNT(*) OVER (PARTITION BY customer_id) AS total_orders -- Nombre total de commandes d’un client
-    FROM {{ ref("stg_local_bike__orders") }}
-),
-
-customer_status_definition AS (
-    SELECT 
-        customer_id,
-        order_date,
-        order_year,
-        order_month,
-        order_rank,
-        total_orders,
+        o.order_id,
+        o.customer_id,
+        o.order_date,
+        ROW_NUMBER() OVER (PARTITION BY o.customer_id ORDER BY o.order_date) AS order_rank,  -- Classement des commandes
+        COUNT(*) OVER (PARTITION BY o.customer_id) AS total_orders,  -- Total commandes
+        EXTRACT(YEAR FROM o.order_date) AS order_year,
+        EXTRACT(MONTH FROM o.order_date) AS order_month,
         CASE 
-            -- First month ordering
-            WHEN order_rank = 1 THEN 'New customer'
-            -- Customers with only one order overall
-            WHEN total_orders = 1 THEN 'Unique order customer'
-            -- Reccurent customers with several orders
+            WHEN ROW_NUMBER() OVER (PARTITION BY o.customer_id ORDER BY o.order_date) = 1 THEN 'New customer'
+            WHEN COUNT(*) OVER (PARTITION BY o.customer_id) = 1 THEN 'Unique order customer'
             ELSE 'Recurrent customer'
         END AS customer_status
-    FROM customer_orders
+    FROM {{ ref("stg_local_bike__orders") }} o
 )
 
--- Final query to select all the relevant order information along with customer status
+-- Requête finale
 SELECT
-  oi.order_id,
-  oi.order_status,
-  oi.order_date,
-  oi.store_id,
-  COALESCE(oi.total_order_amount, 0) AS total_order_amount,
-  COALESCE(oi.total_items, 0) AS total_items,
-  COALESCE(oi.total_distinct_items, 0) AS total_distinct_items,
-  order_year,
-  order_month,
-  c.customer_id,
-  c.customer_status
-FROM items_grouped_by_order AS oi 
-LEFT JOIN customer_orders AS co ON co.customer_id = c.customer_id
-LEFT JOIN customer_status_definition AS c ON oi.customer_id = c.customer_id
+  igo.order_id,
+  igo.order_status,
+  igo.order_date,
+  igo.store_id,
+  COALESCE(igo.total_order_amount, 0) AS total_order_amount,
+  COALESCE(igo.total_items, 0) AS total_items,
+  COALESCE(igo.total_distinct_items, 0) AS total_distinct_items,
+  cs.order_year,
+  cs.order_month,
+  cs.customer_id,
+  cs.customer_status
+FROM items_grouped_by_order AS igo 
+LEFT JOIN customer_status AS cs ON igo.order_id = cs.order_id
