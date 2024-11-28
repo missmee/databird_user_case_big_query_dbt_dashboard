@@ -53,7 +53,7 @@ SELECT
   favorite_brand_id,
   favorite_product_id,
   fb.brand_name,
-  fb.product_name
+  fp.product_name
 FROM favorite_brand AS fb 
 -- double ON join in case a customer bought in 2 different stores
 INNER JOIN favorite_product AS fp ON fb.customer_id = fp.customer_id AND fb.store_id = fp.store_id
