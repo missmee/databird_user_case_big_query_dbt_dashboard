@@ -12,15 +12,15 @@ Modéliser les données d'un client fictif, une entreprise de vélos possédant 
 - Le but final est de leur permettre d’optimiser au mieux les ventes et de
 maximiser le revenu de l'entreprise grâce aux insights obtenus.
 
-#### 3. Modélisation des données :
+#### 2. Modélisation des données :
 - Importer les données brutes dans BigQuery.
 - Structurer les données dans un projet DBT pour faciliter les analyses.
 
-#### 4. Implémentation des tests et documentation :
+#### 3. Implémentation des tests et documentation :
 - Ajouter des tests et une documentation complète, en particulier pour
 les modèles qui seront connectés aux tableaux de bord.
 
-#### 5. Visualisation et partage :
+#### 4. Visualisation et partage :
 - Héberger le projet sur Github pour pouvoir permettre de faire une
 Peer-Review.
 - Créer une ou plusieurs visualisations dans l'outil de BI de votre choix
