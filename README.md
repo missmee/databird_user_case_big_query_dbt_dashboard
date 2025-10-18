@@ -1,50 +1,50 @@
-# Projet final pour la formation Analytics engineer de Databird
+# 🚴‍♂️ Local Bike – Data Self‑Service - De Fivetran - BigQuery → DBT → Power BI
 
-### Le projet
+### 🎯 Contexte
 
-Modéliser les données d'un client fictif, une entreprise de vélos possédant trois magasins.
+Local Bike, une entreprise de distribution de vélos implantée sur trois magasins, souhaitait passer d’un reporting manuel à une solution automatisée et unifiée d’analyse.
+L’objectif : gagner en visibilité sur les ventes, les stocks et le parcours client pour mieux piloter la performance commerciale et anticiper les besoins opérationnels.
+
+### 🧩 Problématique & Solution
+
+#### 🧠 Problème identifié
+Une chaîne de magasins de vélos (3 sites) manque de visibilité sur les ventes, les stocks et les parcours clients.
+L’entreprise disposait de données éparses et non structurées, rendant complexe l’analyse globale de son activité. Les rapports étaient chronophages et souvent obsolètes au moment de leur consultation.
+#### 💡 Solution déployée
+- Centralisation des données dans Google BigQuery.
+- Modélisation et transformation via DBT (ETL/ELT automatisé).
+- Mise en place de tests pour fiabiliser les modèles et assurer la cohérence des indicateurs.
+- Restitution visuelle à travers un dashboard interactif Power BI, facilitant l’exploration et la prise de décision.
+#### ⚙️ Stack technique
+| Outil               | Rôle principal                                     |
+| ------------------- | -------------------------------------------------- |
+| **Google BigQuery** | Stockage et requêtes SQL sur données brutes        |
+| **DBT**             | Transformation, documentation et tests automatisés |
+| **Power BI**        | Visualisation et partage des indicateurs           |
+| **GitHub CI/CD**    | Versionning et intégration continue                |
+| **SQL**             | Requêtes analytiques et modélisation               |
 
 
-### Les objectifs
+### 🧭 Objectifs du projet
 
-#### 1. Définir les axes d’analyse :  
-- Identifier des axes d'analyse permettant d'aider l'équipe des opérations.
-- Le but final est de leur permettre d’optimiser au mieux les ventes et de
-maximiser le revenu de l'entreprise grâce aux insights obtenus.
+#### 1️⃣ Définir les axes d’analyse 
+- Identifier les leviers d’optimisation pour l’équipe opérationnelle.
+- Fournir des insights permettant d’améliorer les ventes et maximiser le revenu.
 
-#### 2. Modélisation des données :
-- Importer les données brutes dans BigQuery.
-- Structurer les données dans un projet DBT pour faciliter les analyses.
+#### 2️⃣ Structurer et modéliser les données
+- Mettre en place des tests automatisés et une documentation lisible sur chaque modèle clé.
+- Faciliter la maintenance et la collaboration via GitHub.
 
-#### 3. Implémentation des tests et documentation :
+#### 3️⃣ Garantir la qualité et la transparence
 - Ajouter des tests et une documentation complète, en particulier pour
 les modèles qui seront connectés aux tableaux de bord.
 
-#### 4. Visualisation et partage :
-- Héberger le projet sur Github pour pouvoir permettre de faire une
-Peer-Review.
-- Créer une ou plusieurs visualisations dans l'outil de BI de votre choix
-(Métabase, Power BI, Tableau) pour présenter les insights de manière
-visuelle.
+#### 4️⃣ Valoriser la donnée par la visualisation
+- Héberger le projet sur GitHub pour permettre les peer‑reviews et le partage des insights.
+- Concevoir des dashboards interactifs sous Power BI
 
-### Notes
+### 📈 Résultats obtenus
+- Automatisation complète du reporting manuel
+- Accès en temps réel aux KPIs clés (ventes, marges, stocks, conversion).
+- Standardisation des sources et gain de temps significatif pour les équipes métiers.
 
-Le dataset va du 2016-01-01 à 2018-12-28.
-Mais les données sont parcellaires après le 2018-04-30. Il n'y a aucune données pour mai 
-et une ou deux orders en status 3 pour les mois suivants. 
-Soit l'entreprise court à sa perte, soit on pourrait imaginer un bug dans l'acquisition de données.
-La deuxième hypothèse est plus plausible sinon solliciter la mise en place de dashboard pour l'usage
-des données ne serait pas leur priorité.
-Quoiqu'il en soit pour l'exercice j'ai donc limité aux données avant cette date.
-
-La signification des chiffres pour order_status n'n'est pas défini. 
-J'ai remarqué que date_shipped n'est renseignée qu'avec le satut 4, j'ai donc inventé les autres.
-
-Après vérification, le dataset ne contient que les prix de vente, pas les prix de gros 
-(le prix de la table products est le même que dans la table orders). 
-Il n'est donc pas possible de calculer la marge.
-
-Pour l'analyse, j'ai volontairement ecarté l'utilisation de la table staff. A la description de l'entreprise,
-il ressort que le fait d'évaluer son personnel selon les ventes ne serait pas aligné avec sa philosophie.
-En outre, le petit nombre de salariés et l'âge récent de l'entreprise ne rend pas ce kpi pertinent. Il existe
-plusieurs autres points de données à étudier pour évaluer les ventes.
